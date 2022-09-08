@@ -1,3 +1,3 @@
-export interface StandardResponse {
-  message: string;
+export interface StandardResponse<T> {
+  message: T;
 }

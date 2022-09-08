@@ -5,14 +5,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BeforeInsert,
+  OneToOne,
 } from "typeorm";
 import { DATABASE_NAME_ENUM } from "../../../enums/database-name.enum";
 import { hash, compare } from "bcrypt";
+import { LoginSessionEntity } from "../../login-session/entity/login-session.entity";
 
 @Entity({ name: DATABASE_NAME_ENUM.user })
 export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: number;
+  id!: string;
 
   @Column({ type: "character varying", length: 20 })
   firstName!: string;
@@ -47,6 +49,12 @@ export class UserEntity {
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   updatedAt!: Date;
+
+  @OneToOne(
+    () => LoginSessionEntity,
+    (LoginSessionEntity) => LoginSessionEntity.user
+  )
+  loginSession!: LoginSessionEntity;
 
   @BeforeInsert()
   async encryptPassword() {

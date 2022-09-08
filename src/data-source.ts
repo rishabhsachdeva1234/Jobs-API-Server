@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { config } from "dotenv";
 import { UserEntity } from "./components/auth/entity/user.entity";
+import { LoginSessionEntity } from "./components/login-session/entity/login-session.entity";
 config({ path: "environment.env" });
 
 export const appDataSource = new DataSource({
@@ -13,5 +14,5 @@ export const appDataSource = new DataSource({
   database: process.env.PG_DB_NAME!,
   synchronize: true,
   logging: false,
-  entities: [UserEntity],
+  entities: [UserEntity, LoginSessionEntity],
 });
