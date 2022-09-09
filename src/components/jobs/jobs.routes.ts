@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { validateToken } from "../../middlewares/validate-token";
 import { JobsController } from "./jobs.controller";
 
 export const jobsRouter: Router = Router();
 
 jobsRouter
   .route("/")
-  .get(JobsController.getAllJobs)
+  .get(validateToken, JobsController.getAllJobs)
   .post(JobsController.createJob);
 
 jobsRouter

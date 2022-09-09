@@ -7,7 +7,7 @@ import { StatusCodes } from "http-status-codes";
 export class JobsController {
   static async getAllJobs(req: CustomRequest<LoginRequest>, res: Response) {
     try {
-      return res.status(StatusCodes.OK).send("get all jobs route");
+      return res.status(StatusCodes.OK).send(req.user);
     } catch (error) {
       console.error(error);
       return res

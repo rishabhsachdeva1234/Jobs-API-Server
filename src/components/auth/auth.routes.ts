@@ -1,8 +1,15 @@
 import { Router } from "express";
 import { RoutesEnum } from "../../enums/routes.enum";
+import { validateToken } from "../../middlewares/validate-token";
 import { AuthController } from "./auth.controller";
 export const authRouter: Router = Router();
 
+authRouter.get(
+  RoutesEnum.userDetails,
+  validateToken,
+  AuthController.getUserDetails
+);
+
 authRouter.post(RoutesEnum.login, AuthController.login);
 
-authRouter.get(RoutesEnum.register, AuthController.register);
+authRouter.post(RoutesEnum.register, AuthController.register);

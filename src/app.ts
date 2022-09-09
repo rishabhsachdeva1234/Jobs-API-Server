@@ -4,6 +4,7 @@ import { restRouter } from "./components/index";
 import { validateEnv } from "./functions/validate-env.function";
 import { appDataSource } from "./data-source";
 import { notFound } from "./middlewares/not-found";
+import { LoginSessionController } from "./components/login-session/login-session.controller";
 config({ path: "environment.env" });
 
 const PORT = process.env.SERVER_PORT || 3000;
@@ -23,7 +24,8 @@ app.use(notFound);
   try {
     await validateEnv();
     await appDataSource.initialize();
-    console.log("Data Source has been initialized!");
+    console.log("Database has been initialized!");
+    // LoginSessionController.deleteExpiredSession();
   } catch (error) {
     console.log(error);
   }

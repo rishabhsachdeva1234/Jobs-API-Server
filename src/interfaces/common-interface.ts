@@ -1,7 +1,7 @@
 import { Request } from "express";
 
 export interface CustomRequest<T> extends Request {
-  user?: JWTVerifiedUser;
+  user?: { id: string };
   body: T;
 }
 
@@ -10,7 +10,7 @@ export interface PaginationRequest {
   pageSize: number;
 }
 
-export interface JWTVerifiedUser {
+export interface JWTTokenData {
   id: string;
-  email: string;
+  sessionKey: string;
 }

@@ -1,8 +1,9 @@
 import { NextFunction, Response } from "express";
 import { verify } from "jsonwebtoken";
-import { CustomRequest, JWTVerifiedUser } from "../interfaces/common-interface";
+import { CustomRequest, JWTTokenData } from "../interfaces/common-interface";
 import { LoginRequest } from "../components/auth/request-interfaces/login-request.interface";
 import { StatusCodes } from "http-status-codes";
+import { LoginSessionController } from "../components/login-session/login-session.controller";
 
 export const validateToken = async (
   req: CustomRequest<LoginRequest>,
@@ -11,9 +12,24 @@ export const validateToken = async (
 ) => {
   try {
     const token = req.headers.authorization?.split(" ")[1] ?? "invalid";
+
     const secretKey = process.env.JWT_SECRET_KEY!;
-    const verifiedUser: JWTVerifiedUser = verify(token, secretKey) as any;
-    req.user = { ...verifiedUser };
+    const decryptedToken: JWTTokenData = verify(
+      token,
+      secretKey
+    ) as JWTTokenData;
+
+    const isSessionValid = await LoginSessionController.verifySession(
+      decryptedToken.id,
+      decryptedToken.sessionKey
+    );
+
+    if (!isSessionValid)
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ message: "Session expired, please login again" });
+
+    req.user = { id: decryptedToken.id };
     next();
   } catch (error) {
     res

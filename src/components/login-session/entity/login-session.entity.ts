@@ -14,6 +14,9 @@ export class LoginSessionEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  @Column()
+  userId!: string;
+
   @Column({
     type: "character varying",
     length: 36,
@@ -22,7 +25,11 @@ export class LoginSessionEntity {
   })
   sessionKey!: string;
 
-  @Column({ type: "timestamp", nullable: false, default: new Date() })
+  @Column({
+    type: "timestamp with time zone",
+    nullable: false,
+    default: new Date(),
+  })
   lastConnection!: Date;
 
   @CreateDateColumn({
@@ -33,5 +40,5 @@ export class LoginSessionEntity {
 
   @OneToOne(() => UserEntity, (UserEntity) => UserEntity.loginSession)
   @JoinColumn()
-  user!: UserEntity["id"];
+  user!: UserEntity;
 }

@@ -85,4 +85,19 @@ export class AuthController {
         .json({ message: "Internal Server Error" });
     }
   }
+
+  static async getUserDetails(req: CustomRequest<unknown>, res: Response) {
+    try {
+      const userRepo = appDataSource.getRepository(UserEntity);
+      const userDetails = await userRepo.findOneBy({ id: req.user?.id });
+      if (!userDetails)
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "No user found." });
+      const { password, ...userDetail } = userDetails;
+      return res.status(StatusCodes.OK).json(userDetail);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
