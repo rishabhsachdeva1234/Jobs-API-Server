@@ -46,7 +46,7 @@ export class AuthController {
         expiresIn: "2hr",
       });
 
-      return res.status(StatusCodes.OK).json({ token });
+      return res.status(StatusCodes.OK).json({ token, role: user.role });
     } catch (error) {
       if (error instanceof CustomError)
         return res.status(error.status).json({ message: error.customMessage });

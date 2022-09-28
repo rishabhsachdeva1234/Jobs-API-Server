@@ -1,4 +1,4 @@
-export const job_position = [
+export const jobPositions = [
   "Junior Dev",
   "Senior Dev",
   "Software Developer",

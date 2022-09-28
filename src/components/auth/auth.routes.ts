@@ -8,7 +8,6 @@ export const authRouter: Router = Router();
 authRouter.get(
   RoutesEnum.userDetails,
   validateToken,
-  validateUserRole("Admin"),
   AuthController.getUserDetails
 );
 

@@ -1,5 +1,5 @@
 import { IsArray, IsIn, IsNotEmpty, IsString } from "class-validator";
-import { job_position } from "../../../constants/job-position.constant";
+import { jobPositions } from "../../../constants/job-position.constant";
 import { technologies } from "../../../constants/technologies.constant";
 
 export class CreateJobDto {
@@ -8,8 +8,8 @@ export class CreateJobDto {
   company!: string;
 
   @IsNotEmpty()
-  @IsIn(job_position)
-  position!: typeof job_position[number];
+  @IsIn(jobPositions)
+  position!: typeof jobPositions[number];
 
   @IsArray()
   @IsIn(technologies, { each: true })
