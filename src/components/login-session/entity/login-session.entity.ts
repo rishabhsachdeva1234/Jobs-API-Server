@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
+import { DATABASE_NAME_ENUM } from "../../../enums/database-name.enum";
 import { UserEntity } from "../../auth/entity/user.entity";
 
-@Entity()
+@Entity({ name: DATABASE_NAME_ENUM.login_session })
 export class LoginSessionEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;

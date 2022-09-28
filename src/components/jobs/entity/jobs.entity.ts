@@ -4,27 +4,38 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
+import { DATABASE_NAME_ENUM } from "../../../enums/database-name.enum";
+import { UserEntity } from "../../auth/entity/user.entity";
 
-@Entity()
+@Entity({ name: DATABASE_NAME_ENUM.jobs })
 export class JobsEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: number;
 
-  @Column({ type: "varying character", length: 50 })
+  @Column()
+  createdBy!: string;
+
+  @Column({ type: "character varying", length: 50 })
   company!: string;
 
-  @Column({ type: "varying character", length: 100 })
+  @Column({ type: "character varying", length: 100 })
   position!: string;
 
-  @Column({ type: "varying character", length: 10 })
-  status!: string;
+  @Column({ type: "text" })
+  technologies!: string;
+
+  @Column({ type: "text" })
+  description!: string;
 
   @Column({ type: "boolean", default: true })
   isActive!: boolean;
 
-  @Column()
-  createdBy!: string;
+  @ManyToOne(() => UserEntity, (UserEntity) => UserEntity.jobsListed)
+  @JoinColumn({ name: "createdBy" })
+  user!: UserEntity;
 
   @CreateDateColumn({
     type: "timestamp",

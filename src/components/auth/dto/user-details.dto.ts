@@ -1,6 +1,7 @@
 import { IsString, IsEmail, IsDate, IsIn } from "class-validator";
 import { Transform } from "class-transformer";
 import { gender } from "../../../constants/gender.constant";
+import { userRoles } from "../../../constants/user-roles.constant";
 
 export class UserDetailsDto {
   @IsString()
@@ -27,4 +28,7 @@ export class UserDetailsDto {
     return dob;
   })
   dateOfBirth!: Date;
+
+  @IsIn(userRoles)
+  role!: typeof userRoles[number];
 }

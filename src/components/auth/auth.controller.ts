@@ -40,7 +40,7 @@ export class AuthController {
 
       console.info(`session added for user: ${user.id}`);
 
-      const payload = { id: user.id, sessionKey };
+      const payload = { id: user.id, sessionKey, role: user.role };
       const secretKey = process.env.JWT_SECRET_KEY!;
       const token = sign(payload, secretKey, {
         expiresIn: "2hr",
@@ -56,8 +56,17 @@ export class AuthController {
 
   static async register(req: CustomRequest<UserDetailsDto>, res: Response) {
     try {
-      const { firstName, lastName, dateOfBirth, email, gender, password } =
-        await validateRequest(UserDetailsDto, req.body);
+      const {
+        firstName,
+        lastName,
+        dateOfBirth,
+        email,
+        gender,
+        password,
+        role,
+      } = await validateRequest(UserDetailsDto, req.body);
+
+      // Purpose of saving user by instantiating is to trigger typeorm hooks eg. @BeforeInsert hook for encrypting password.
       const userDetails = new UserEntity();
       userDetails.firstName = firstName;
       userDetails.lastName = lastName;
@@ -65,6 +74,7 @@ export class AuthController {
       userDetails.password = password;
       userDetails.email = email;
       userDetails.gender = gender;
+      userDetails.role = role;
 
       const userRepo = appDataSource.getRepository(UserEntity);
       await userRepo.save(userDetails);

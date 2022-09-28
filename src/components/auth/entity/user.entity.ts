@@ -6,10 +6,13 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   OneToOne,
+  OneToMany,
 } from "typeorm";
 import { DATABASE_NAME_ENUM } from "../../../enums/database-name.enum";
 import { hash, compare } from "bcrypt";
 import { LoginSessionEntity } from "../../login-session/entity/login-session.entity";
+import { JobsEntity } from "../../jobs/entity/jobs.entity";
+import { userRoles } from "../../../constants/user-roles.constant";
 
 @Entity({ name: DATABASE_NAME_ENUM.user })
 export class UserEntity {
@@ -34,6 +37,13 @@ export class UserEntity {
   @Column({ type: "date" })
   dateOfBirth!: Date;
 
+  @Column({
+    type: "enum",
+    enum: userRoles,
+    default: userRoles["1"],
+  })
+  role!: typeof userRoles[number];
+
   @Column({ type: "boolean", default: true })
   isActive!: boolean;
 
@@ -55,6 +65,9 @@ export class UserEntity {
     (LoginSessionEntity) => LoginSessionEntity.user
   )
   loginSession!: LoginSessionEntity;
+
+  @OneToMany(() => JobsEntity, (JobsEntity) => JobsEntity.user)
+  jobsListed!: JobsEntity[];
 
   @BeforeInsert()
   async encryptPassword() {

@@ -29,7 +29,7 @@ export const validateToken = async (
         .status(StatusCodes.UNAUTHORIZED)
         .json({ message: "Session expired, please login again" });
 
-    req.user = { id: decryptedToken.id };
+    req.user = { ...decryptedToken };
     next();
   } catch (error) {
     res
